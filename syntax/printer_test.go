@@ -351,9 +351,12 @@ func TestFprintWeirdFormat(t *testing.T) {
 		samePrint("#foo\n#\n#bar"),
 	}
 
+	n := 0
 	for i, tc := range weirdFormats {
 		t.Run(fmt.Sprintf("%03d", i), func(t *testing.T) {
 			check := func(in, want string) {
+				ioutil.WriteFile(fmt.Sprintf("../corpus/printer-%03d", n), []byte(in), 0644)
+				n++
 				prog, err := Parse(newStrictReader(in), "", ParseComments)
 				if err != nil {
 					t.Fatalf("Unexpected error in %q: %v", in, err)
